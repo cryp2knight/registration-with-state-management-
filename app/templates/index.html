@@ -1,0 +1,58 @@
+<!doctype html>
+
+<head>
+    <title>Registration Website with State management</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <style>
+        footer {
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 5%;
+            color: black;
+        }
+    </style>
+</head>
+
+
+<body>
+    <nav>
+        <h1>Registration Website with State management</h1>
+        <a href="{{ url_for('logout') }}">{{username}}, Logout</a>
+    </nav>
+
+    <div class="content">
+        <div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="step-values">
+                <h5>Step 1</h5>
+                <h1>How would you describe yourself?</h1>
+                <p>{{step.step1}}</p>
+            </div>
+            <div class="step-values">
+                <h5>Step 2</h5>
+                <h1>What makes you unique?</h1>
+                <p>{{step.step2}}</p>
+            </div>
+            <div class="step-values">
+                <h5>Step 3</h5>
+                <h1>What are you passionate about?</h1>
+                <p>{{step.step3}}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <h4>Registration Website with State management</h4>
+        <p>Copyright 2020</p>
+    </footer>
+</body>
+
+
+</html>

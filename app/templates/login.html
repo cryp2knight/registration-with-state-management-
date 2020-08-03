@@ -1,0 +1,115 @@
+<!doctype html>
+
+<head>
+    <title>Registration Website with State management</title>
+    <style>
+        input[type=text],
+        input[type=password],
+        input[type=submit] {
+            margin: 10px;
+            padding: 5px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type=submit] {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            border: none;
+            padding: 10px;
+        }
+
+        input[type=submit]:hover {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 5px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        footer {
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 5%;
+            color: black;
+        }
+
+        a {
+            color: black !important;
+        }
+        a:hover {
+            color: white !important;
+            
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+
+</head>
+
+
+<body>
+    <nav>
+        <h1>Registration Website with State management</h1>
+    </nav>
+
+    <div class="content">
+        <div class=" step-values">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <h1>Login</h1>
+            <form action="" method="post">
+                {{ form.csrf_token }}
+                <div>
+                    <div class="buttons">
+                        {{ form.username.label }}
+                        {{ form.username }}
+                    </div>
+                    {% for error in form.username.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <div class="buttons">
+                        {{ form.password.label }}<br>
+                        {{ form.password }}
+                    </div>
+                    {% for error in form.password.errors %}
+                    <p style="color:red;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <br>
+                    {{ form.remember_me }} Remember me
+                </div>
+
+                <hr>
+                <div class="buttons">
+                    <a href="{{ url_for('register') }}">Register</a> {{ form.submit }}
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <h4>Registration Website with State management</h4>
+        <p>Copyright 2020</p>
+    </footer>
+</body>
+
+</html>

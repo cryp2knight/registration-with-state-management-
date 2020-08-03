@@ -1,0 +1,163 @@
+<!doctype html>
+
+<head>
+    <title>Registration Website with State management</title>
+    <style>
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input[type=submit],
+        button {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+            border-radius: 10px;
+            color: white;
+            outline: none;
+            border: none;
+            padding: 10px;
+        }
+
+        input[type=submit]:hover,
+        button:hover {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+
+        .step {
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            font-family: Arial, Helvetica, sans-serif;
+            resize: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        a:hover {
+            background-color: black;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <style>
+        footer {
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 5%;
+            color: black;
+        }
+    </style>
+</head>
+
+
+<body>
+    <nav>
+        <h1>Registration Website with State management</h1>
+
+        <a href="{{ url_for('logout') }}">{{username}}, Logout</a>
+    </nav>
+    <div class="content">
+        <div class="step-values">
+
+            <div id="1" class="step">
+                <h5>Step 1</h5>
+                <h1>
+                    How would you describe yourself?
+                </h1>
+                <textarea id="step1-text" maxlength="250">{{step1}}</textarea>
+            </div>
+
+            <div id="2" class="step">
+                <h5>Step 2</h5>
+                <h1>
+                    What makes you unique?
+                </h1>
+                <textarea id="step2-text" maxlength="250">{{step2}}</textarea>
+            </div>
+
+            <div id="3" class="step">
+                <h5>Step 3</h5>
+                <h1>
+                    What are you passionate about?
+                </h1>
+                <textarea id="step3-text" maxlength="250">{{step3}}</textarea>
+            </div>
+            <div class="buttons">
+                <button id="btnBack">back</button>
+                <button id="btnNext">next</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        var last_step_taken;
+        fetch('/steps/api?' + 'id={{uid}}')
+            .then(res => {
+                return res.text()
+            }).then(d => {
+                var obj = JSON.parse(d);
+                last_step_taken = obj.last_step_taken
+                document.getElementById(obj.last_step_taken).style.display = 'block'
+                if (last_step_taken == 1) {
+                    document.getElementById('btnBack').style.display = 'none'
+                }
+            })
+
+        document.getElementById('btnBack').onclick = function () {
+            document.getElementById(last_step_taken).style.display = "none"
+            last_step_taken -= 1
+            document.getElementById(last_step_taken).style.display = "block"
+            if (last_step_taken == 1) {
+                document.getElementById('btnBack').style.display = 'none'
+            }
+        }
+
+        document.getElementById('btnNext').onclick = function () {
+
+            if (document.getElementById('step' + last_step_taken + '-text').value != '') {
+                fetch('/steps/api/add', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: '{{uid}}',
+                        data: document.getElementById('step' + last_step_taken + '-text').value,
+                        last_step: last_step_taken
+                    })
+                }).then(res => {
+                    return res.text()
+                }).then(ss => {
+                    last_step_taken++
+                    if (last_step_taken < 4) {
+                        if (last_step_taken == 1) {
+                            document.getElementById('btnBack').style.display = "none"
+                        }
+                        document.getElementById('btnBack').style.display = "block"
+                        document.getElementById(last_step_taken - 1).style.display = 'none'
+                        document.getElementById(last_step_taken).style.display = 'block'
+                    } else {
+                        window.location.reload()
+                    }
+                })
+            }
+        }
+    </script>
+
+    <footer class="footer">
+        <h4>Registration Website with State management</h4>
+        <p>Copyright 2020</p>
+    </footer>
+
+</body>
+
+</html>
