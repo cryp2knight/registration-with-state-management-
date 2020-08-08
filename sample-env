@@ -1,8 +1,0 @@
-FLASK_APP=app.py
-
-# For development it should be FLASK_ENV=development
-# For production it should be FLASK_ENV=production
-FLASK_ENV=development
-
-SECRET_KEY=secret12345
-DATABASE_URL=mysql+pymysql://root:password@localhost:3306/registrationwithmanagement
